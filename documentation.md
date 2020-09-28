@@ -1,8 +1,27 @@
-# Laminas Project
+# Laminas
+## Installation
+
+If you use Codeception installed using composer, install this module with the following command:
+
+```
+composer require --dev codeception/module-laminas
+```
+
+Alternatively, you can enable `Laminas` module in suite configuration file and run
+ 
+```
+codecept init upgrade4
+```
+
+This module was bundled with Codeception 2 and 3, but since version 4 it is necessary to install it separately.   
+Some modules are bundled with PHAR files.  
+Warning. Using PHAR file and composer in the same project can cause unexpected errors.  
+
+## Description
+
 
 
 This module allows you to run tests inside the Laminas Project.
-
 Uses `tests/application.config.php` config file by default.
 
 Note: services part and Doctrine integration is not compatible with Laminas yet
@@ -18,7 +37,6 @@ Note: services part and Doctrine integration is not compatible with Laminas yet
 * em_service: 'Doctrine\ORM\EntityManager' - use the stated EntityManager to pair with Doctrine Module.
 
 ## Public Properties
-
 * application -  instance of `\Laminas\Mvc\ApplicationInterface`
 * db - instance of `\Laminas\Db\Adapter\AdapterInterface`
 * client - BrowserKit client
@@ -164,9 +182,13 @@ $this->getModule('Laminas')->_savePageSource(codecept_output_dir().'page.html');
 ### addServiceToContainer
  
 Adds service to a Laminas container
+
+ * `[Part]` services
+
  * `param string` $name
  * `param object` $service
- * `[Part]` services
+
+ * `return` void
 
 
 ### amHttpAuthenticated
@@ -195,7 +217,6 @@ $I->amOnPage('/register');
 ### amOnRoute
  
 Opens web page using route name and parameters.
-
 ``` php
 <?php
 $I->amOnRoute('posts.create');
@@ -203,8 +224,10 @@ $I->amOnRoute('posts.show', array('id' => 34));
 ?>
 ```
 
- * `param` $routeName
- * `param array` $params
+ * `param string` $routeName
+ * `param array`  $params
+
+ * `return` void
 
 
 ### attachFile
@@ -627,15 +650,15 @@ Grabs current page source code.
  
 Grabs a service from a Laminas container.
 Recommended to use for unit testing.
-
 ``` php
 <?php
 $em = $I->grabServiceFromContainer('Doctrine\ORM\EntityManager');
 ?>
 ```
-
- * `param` $service
  * `[Part]` services
+
+ * `param string` $service
+
 
 
 ### grabTextFrom
@@ -690,6 +713,17 @@ $I->haveHttpHeader('Client&#95;Id', 'Codeception');
  * `param string` $name the name of the request header
  * `param string` $value the value to set it to for subsequent
        requests
+
+
+### haveServerParameter
+ 
+Sets SERVER parameter valid for all next requests.
+
+```php
+$I->haveServerParameter('name', 'value');
+```
+ * `param` $name
+ * `param` $value
 
 
 ### makeHtmlSnapshot
@@ -791,7 +825,6 @@ $I->seeCookie('PHPSESSID');
 ### seeCurrentRouteIs
  
 Checks that current url matches route.
-
 ``` php
 <?php
 $I->seeCurrentRouteIs('posts.index');
@@ -799,8 +832,10 @@ $I->seeCurrentRouteIs('posts.show', ['id' => 8]));
 ?>
 ```
 
- * `param` $routeName
- * `param array` $params
+ * `param string` $routeName
+ * `param array`  $params
+
+ * `return` void
 
 
 ### seeCurrentUrlEquals
@@ -1176,6 +1211,17 @@ $I->setCookie('PHPSESSID', 'el4ukv0kqbvoirg7nkp4dncpk3');
 
 
 
+### setServerParameters
+ 
+Sets SERVER parameters valid for all next requests.
+this will remove old ones.
+
+```php
+$I->setServerParameters([]);
+```
+ * `param array` $params
+
+
 ### submitForm
  
 Submits the given form on the page, with the given form
@@ -1379,4 +1425,4 @@ $I->uncheckOption('#notify');
 
  * `param` $option
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/module-zf2/tree/master/src/Codeception/Module/ZF2.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/module-laminas/tree/master/src/Codeception/Module/Laminas.php">Help us to improve documentation. Edit module reference</a></div>
