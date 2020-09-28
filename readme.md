@@ -1,11 +1,11 @@
-# Codeception module for Zend Framework 2 and 3
+# Codeception module for the Laminas Project
 
-![Build Status](https://github.com/Codeception/module-zf2/workflows/CI/badge.svg)
+![Build Status](https://github.com/Codeception/module-laminas/workflows/CI/badge.svg)
 
 ## Installation
 
 ```
-composer require --dev "codeception/module-zf2"
+composer require --dev "codeception/module-laminas"
 ```
 
 ## Documentation

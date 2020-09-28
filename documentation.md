@@ -1,12 +1,30 @@
-# ZF2
+# Laminas
+## Installation
+
+If you use Codeception installed using composer, install this module with the following command:
+
+```
+composer require --dev codeception/module-laminas
+```
+
+Alternatively, you can enable `Laminas` module in suite configuration file and run
+ 
+```
+codecept init upgrade4
+```
+
+This module was bundled with Codeception 2 and 3, but since version 4 it is necessary to install it separately.   
+Some modules are bundled with PHAR files.  
+Warning. Using PHAR file and composer in the same project can cause unexpected errors.  
+
+## Description
 
 
-This module allows you to run tests inside Zend Framework 2 and Zend Framework 3.
 
-File `init_autoloader` in project's root is required by Zend Framework 2.
+This module allows you to run tests inside the Laminas Project.
 Uses `tests/application.config.php` config file by default.
 
-Note: services part and Doctrine integration is not compatible with ZF3 yet
+Note: services part and Doctrine integration is not compatible with Laminas yet
 
 ## Status
 
@@ -19,9 +37,8 @@ Note: services part and Doctrine integration is not compatible with ZF3 yet
 * em_service: 'Doctrine\ORM\EntityManager' - use the stated EntityManager to pair with Doctrine Module.
 
 ## Public Properties
-
-* application -  instance of `\Zend\Mvc\ApplicationInterface`
-* db - instance of `\Zend\Db\Adapter\AdapterInterface`
+* application -  instance of `\Laminas\Mvc\ApplicationInterface`
+* db - instance of `\Laminas\Db\Adapter\AdapterInterface`
 * client - BrowserKit client
 
 ## Parts
@@ -34,10 +51,10 @@ Usage example:
 actor: AcceptanceTester
 modules:
     enabled:
-        - ZF2:
+        - Laminas:
             part: services
         - Doctrine2:
-            depends: ZF2
+            depends: Laminas
         - WebDriver:
             url: http://your-url.com
             browser: phantomjs
@@ -59,10 +76,10 @@ Use it in Helpers or GroupObject or Extension classes:
 
 ```php
 <?php
-$els = $this->getModule('ZF2')->_findElements('.items');
-$els = $this->getModule('ZF2')->_findElements(['name' => 'username']);
+$els = $this->getModule('Laminas')->_findElements('.items');
+$els = $this->getModule('Laminas')->_findElements(['name' => 'username']);
 
-$editLinks = $this->getModule('ZF2')->_findElements(['link' => 'Edit']);
+$editLinks = $this->getModule('Laminas')->_findElements(['link' => 'Edit']);
 // now you can iterate over $editLinks and check that all them have valid hrefs
 ```
 
@@ -85,7 +102,7 @@ Use it in Helpers when you want to retrieve response of request performed by ano
 // in Helper class
 public function seeResponseContains($text)
 {
-   $this->assertStringContainsString($text, $this->getModule('ZF2')->_getResponseContent(), "response contains");
+   $this->assertStringContainsString($text, $this->getModule('Laminas')->_getResponseContent(), "response contains");
 }
 ?>
 ```
@@ -105,7 +122,7 @@ Useful for testing multi-step forms on a specific step.
 <?php
 // in Helper class
 public function openCheckoutFormStep2($orderId) {
-    $this->getModule('ZF2')->_loadPage('POST', '/checkout/step2', ['order' => $orderId]);
+    $this->getModule('Laminas')->_loadPage('POST', '/checkout/step2', ['order' => $orderId]);
 }
 ?>
 ```
@@ -130,7 +147,7 @@ Returns a string with response body.
 <?php
 // in Helper class
 public function createUserByApi($name) {
-    $userData = $this->getModule('ZF2')->_request('POST', '/api/v1/users', ['name' => $name]);
+    $userData = $this->getModule('Laminas')->_request('POST', '/api/v1/users', ['name' => $name]);
     $user = json_decode($userData);
     return $user->id;
 }
@@ -157,17 +174,21 @@ To load arbitrary page for interaction, use `_loadPage` method.
 Saves page source of to a file
 
 ```php
-$this->getModule('ZF2')->_savePageSource(codecept_output_dir().'page.html');
+$this->getModule('Laminas')->_savePageSource(codecept_output_dir().'page.html');
 ```
  * `param` $filename
 
 
 ### addServiceToContainer
  
-Adds service to ZF2 container
+Adds service to a Laminas container
+
+ * `[Part]` services
+
  * `param string` $name
  * `param object` $service
- * `[Part]` services
+
+ * `return` void
 
 
 ### amHttpAuthenticated
@@ -196,7 +217,6 @@ $I->amOnPage('/register');
 ### amOnRoute
  
 Opens web page using route name and parameters.
-
 ``` php
 <?php
 $I->amOnRoute('posts.create');
@@ -204,8 +224,10 @@ $I->amOnRoute('posts.show', array('id' => 34));
 ?>
 ```
 
- * `param` $routeName
- * `param array` $params
+ * `param string` $routeName
+ * `param array`  $params
+
+ * `return` void
 
 
 ### attachFile
@@ -626,17 +648,17 @@ Grabs current page source code.
 
 ### grabServiceFromContainer
  
-Grabs a service from ZF2 container.
+Grabs a service from a Laminas container.
 Recommended to use for unit testing.
-
 ``` php
 <?php
 $em = $I->grabServiceFromContainer('Doctrine\ORM\EntityManager');
 ?>
 ```
-
- * `param` $service
  * `[Part]` services
+
+ * `param string` $service
+
 
 
 ### grabTextFrom
@@ -691,6 +713,17 @@ $I->haveHttpHeader('Client&#95;Id', 'Codeception');
  * `param string` $name the name of the request header
  * `param string` $value the value to set it to for subsequent
        requests
+
+
+### haveServerParameter
+ 
+Sets SERVER parameter valid for all next requests.
+
+```php
+$I->haveServerParameter('name', 'value');
+```
+ * `param` $name
+ * `param` $value
 
 
 ### makeHtmlSnapshot
@@ -792,7 +825,6 @@ $I->seeCookie('PHPSESSID');
 ### seeCurrentRouteIs
  
 Checks that current url matches route.
-
 ``` php
 <?php
 $I->seeCurrentRouteIs('posts.index');
@@ -800,8 +832,10 @@ $I->seeCurrentRouteIs('posts.show', ['id' => 8]));
 ?>
 ```
 
- * `param` $routeName
- * `param array` $params
+ * `param string` $routeName
+ * `param array`  $params
+
+ * `return` void
 
 
 ### seeCurrentUrlEquals
@@ -1177,6 +1211,17 @@ $I->setCookie('PHPSESSID', 'el4ukv0kqbvoirg7nkp4dncpk3');
 
 
 
+### setServerParameters
+ 
+Sets SERVER parameters valid for all next requests.
+this will remove old ones.
+
+```php
+$I->setServerParameters([]);
+```
+ * `param array` $params
+
+
 ### submitForm
  
 Submits the given form on the page, with the given form
@@ -1380,4 +1425,4 @@ $I->uncheckOption('#notify');
 
  * `param` $option
 
-<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/module-zf2/tree/master/src/Codeception/Module/ZF2.php">Help us to improve documentation. Edit module reference</a></div>
+<p>&nbsp;</p><div class="alert alert-warning">Module reference is taken from the source code. <a href="https://github.com/Codeception/module-laminas/tree/master/src/Codeception/Module/Laminas.php">Help us to improve documentation. Edit module reference</a></div>
