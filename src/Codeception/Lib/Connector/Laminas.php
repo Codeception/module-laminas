@@ -27,7 +27,7 @@ class Laminas extends Client
 
     private $persistentServices = [];
 
-    public function setApplicationConfig(array $applicationConfig): void
+    public function setApplicationConfig(array $applicationConfig)
     {
         $this->applicationConfig = $applicationConfig;
 
@@ -41,7 +41,7 @@ class Laminas extends Client
      *
      * @throws Exception
      */
-    public function doRequest($request): Response
+    public function doRequest($request)
     {
         $this->createApplication();
 
@@ -101,7 +101,7 @@ class Laminas extends Client
         );
     }
 
-    public function getLaminasRequest(): LaminasRequest
+    public function getLaminasRequest()
     {
         return $this->laminasRequest;
     }
@@ -111,7 +111,7 @@ class Laminas extends Client
      *
      * @return mixed
      */
-    public function grabServiceFromContainer(string $service)
+    public function grabServiceFromContainer($service)
     {
         $serviceManager = $this->application->getServiceManager();
 
@@ -122,19 +122,19 @@ class Laminas extends Client
         return $serviceManager->get($service);
     }
 
-    public function persistService(string $name): void
+    public function persistService($name)
     {
         $service                         = $this->grabServiceFromContainer($name);
         $this->persistentServices[$name] = $service;
     }
 
     /**
-     * @param string $name
+     * @param $name
      * @param mixed  $service
      *
      * @return void
      */
-    public function addServiceToContainer(string $name, $service): void
+    public function addServiceToContainer($name, $service)
     {
         $this->application->getServiceManager()->setAllowOverride(true);
         $this->application->getServiceManager()->setService($name, $service);
@@ -143,7 +143,7 @@ class Laminas extends Client
         $this->persistentServices[$name] = $service;
     }
 
-    private function extractHeaders(BrowserKitRequest $request): HttpHeaders
+    private function extractHeaders(BrowserKitRequest $request)
     {
         $headers        = [];
         $server         = $request->getServer();
@@ -177,7 +177,7 @@ class Laminas extends Client
         return $httpHeaders;
     }
 
-    private function createApplication(): void
+    private function createApplication()
     {
         $this->application = Application::init(
             ArrayUtils::merge(

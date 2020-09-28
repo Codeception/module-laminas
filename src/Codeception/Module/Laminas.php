@@ -86,7 +86,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      */
     private $domainCollector = [];
 
-    public function _initialize(): void
+    public function _initialize()
     {
         $initAutoloaderFile = Configuration::projectDir() . 'init_autoloader.php';
         if (\file_exists($initAutoloaderFile)) {
@@ -106,14 +106,14 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         $this->client->setApplicationConfig($this->applicationConfig);
     }
 
-    public function _before(TestInterface $test): void
+    public function _before(TestInterface $test)
     {
         $this->client = new LaminasConnector();
         $this->client->setApplicationConfig($this->applicationConfig);
         $_SERVER['REQUEST_URI'] = '';
     }
 
-    public function _after(TestInterface $test): void
+    public function _after(TestInterface $test)
     {
         $_SESSION = [];
         $_GET     = [];
@@ -126,12 +126,12 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         parent::_after($test);
     }
 
-    public function _parts(): array
+    public function _parts()
     {
         return ['services'];
     }
 
-    public function _afterSuite(): void
+    public function _afterSuite()
     {
         unset($this->client);
     }
@@ -161,7 +161,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      *
      * @return mixed
      */
-    public function grabServiceFromContainer(string $service)
+    public function grabServiceFromContainer($service)
     {
         return $this->client->grabServiceFromContainer($service);
     }
@@ -176,7 +176,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      *
      * @return void
      */
-    public function addServiceToContainer(string $name, $service): void
+    public function addServiceToContainer($name, $service)
     {
         $this->client->addServiceToContainer($name, $service);
     }
@@ -195,7 +195,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      *
      * @return void
      */
-    public function amOnRoute(string $routeName, array $params = []): void
+    public function amOnRoute($routeName, array $params = [])
     {
         $router = $this->client->grabServiceFromContainer('router');
         $url    = $router->assemble($params, ['name' => $routeName]);
@@ -217,7 +217,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      *
      * @return void
      */
-    public function seeCurrentRouteIs(string $routeName, array $params = []): void
+    public function seeCurrentRouteIs($routeName, array $params = [])
     {
         $router = $this->client->grabServiceFromContainer('router');
         $url    = $router->assemble($params, ['name' => $routeName]);
@@ -225,7 +225,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         $this->seeCurrentUrlEquals($url);
     }
 
-    protected function getInternalDomains(): array
+    protected function getInternalDomains()
     {
         /** @var TreeRouteStack $router */
         $router                = $this->client->grabServiceFromContainer('router');
@@ -236,7 +236,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         return \array_unique($this->domainCollector);
     }
 
-    private function addInternalDomainsFromRoutes(Traversable $routes): void
+    private function addInternalDomainsFromRoutes(Traversable $routes)
     {
         foreach ($routes as $name => $route) {
             if ($route instanceof Hostname) {
@@ -261,7 +261,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      *
      * @return void
      */
-    private function addInternalDomain($route): void
+    private function addInternalDomain($route)
     {
         $regex                    = ReflectionHelper::readPrivateProperty($route, 'regex');
         $this->domainCollector [] = '/^' . $regex . '$/';
