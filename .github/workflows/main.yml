@@ -37,12 +37,19 @@ jobs:
         extensions: pdo, mysql, zip
         coverage: none
 
+    - name: Downgrade to composer v1
+      run: composer self-update --1
+
     - name: Validate composer.json and composer.lock
       run: composer validate
 
-    - name: Install dependencies
-      run: |
-        composer install --prefer-dist --no-progress --no-interaction --no-suggest
+    - name: Install dependencies on PHP7
+      if: matrix.php < 8
+      run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
+
+    - name: Install dependencies on PHP8
+      if: matrix.php == 8.0
+      run: composer install --prefer-dist --no-progress --no-interaction --ignore-platform-reqs
 
     - name: Checkout Laminas tests
       uses: actions/checkout@v2
@@ -52,10 +59,18 @@ jobs:
         ref: 'master'
         submodules: recursive
 
-    - name: Install dependencies of Laminas tests
-      run: |
-        composer update --no-dev --prefer-dist --no-interaction
-        php vendor/bin/doctrine-module orm:schema-tool:create
+    - name: Install dependencies of Laminas tests on PHP 7
+      if: matrix.php < 8
+      run: composer update --no-dev --prefer-dist --no-interaction
+      working-directory: framework-tests
+
+    - name: Install dependencies of Laminas tests on PHP 8
+      if: matrix.php == 8.0
+      run: composer update --no-dev --prefer-dist --no-interaction --ignore-platform-reqs
+      working-directory: framework-tests
+
+    - name: Create database schema
+      run: php vendor/bin/doctrine-module orm:schema-tool:create
       working-directory: framework-tests
 
     - name: Run test suite
