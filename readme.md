@@ -10,4 +10,4 @@ composer require --dev "codeception/module-laminas"
 
 ## Documentation
 
-<a href="documentation.md">Look at documentation.md file</a>
+See [the module documentation](https://codeception.com/docs/modules/Laminas).
