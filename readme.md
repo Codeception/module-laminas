@@ -7,6 +7,10 @@ A Codeception module for the Laminas Project
 [![Total Downloads](https://poser.pugx.org/codeception/module-laminas/downloads)](https://packagist.org/packages/codeception/module-laminas)
 [![License](https://poser.pugx.org/codeception/module-laminas/license)](/LICENSE)
 
+## Requirements
+
+* `PHP 7.1` or higher.
+
 ## Installation
 
 ```
