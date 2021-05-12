@@ -22,8 +22,6 @@ use Traversable;
  * This module allows you to run tests inside the Laminas Project.
  * Uses `tests/application.config.php` config file by default.
  *
- * Note: services part and Doctrine integration is not compatible with Laminas yet
- *
  * ## Status
  *
  * * Maintainer: **Naktibalda**
