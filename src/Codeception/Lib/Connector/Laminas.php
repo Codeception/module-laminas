@@ -133,13 +133,13 @@ class Laminas extends AbstractBrowser
         return $serviceManager->get($service);
     }
 
-    public function persistService($name): void
+    public function persistService(string $name): void
     {
         $service                         = $this->grabServiceFromContainer($name);
         $this->persistentServices[$name] = $service;
     }
 
-    public function addServiceToContainer($name, $service): void
+    public function addServiceToContainer(string $name, $service): void
     {
         $this->application->getServiceManager()->setAllowOverride(true);
         $this->application->getServiceManager()->setService($name, $service);
