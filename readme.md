@@ -17,6 +17,8 @@ composer require "codeception/module-laminas" --dev
 
 See [the module documentation](https://codeception.com/docs/modules/Laminas).
 
+[Changelog](https://github.com/Codeception/module-laminas/releases)
+
 ## License
 
 `Codeception Module Laminas` is open-sourced software licensed under the [MIT](/LICENSE) License.
