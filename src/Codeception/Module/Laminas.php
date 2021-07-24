@@ -175,9 +175,8 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      * Adds service to a Laminas container
      *
      * @part services
-     * @param object $service
      */
-    public function addServiceToContainer(string $name, $service): void
+    public function addServiceToContainer(string $name, object $service): void
     {
         $this->client->addServiceToContainer($name, $service);
     }
@@ -248,10 +247,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         }
     }
 
-    /**
-     * @param object $route
-     */
-    private function addInternalDomain($route): void
+    private function addInternalDomain(object $route): void
     {
         $regex                    = ReflectionHelper::readPrivateProperty($route, 'regex');
         $this->domainCollector [] = '/^' . $regex . '$/';
