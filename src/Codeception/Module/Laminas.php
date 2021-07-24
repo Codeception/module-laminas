@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Codeception\Module;
 
 use Codeception\Configuration;
@@ -17,6 +19,9 @@ use Laminas\Router\Http\Hostname;
 use Laminas\Router\Http\Part;
 use Laminas\Router\Http\TreeRouteStack;
 use Traversable;
+use function array_unique;
+use function class_exists;
+use function file_exists;
 
 /**
  * This module allows you to run tests inside the Laminas Project.
@@ -73,8 +78,13 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         'em_service' => 'Doctrine\ORM\EntityManager',
     ];
 
+    /** @var array */
     protected $applicationConfig = [];
+
+    /** @var int */
     protected $queries           = 0;
+
+    /** @var int */
     protected $time              = 0;
 
     /**
@@ -87,7 +97,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     public function _initialize()
     {
         $initAutoloaderFile = Configuration::projectDir() . 'init_autoloader.php';
-        if (\file_exists($initAutoloaderFile)) {
+        if (file_exists($initAutoloaderFile)) {
             require $initAutoloaderFile;
         }
 
@@ -95,7 +105,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         if (isset($this->applicationConfig['module_listener_options']['config_cache_enabled'])) {
             $this->applicationConfig['module_listener_options']['config_cache_enabled'] = false;
         }
-        if (\class_exists(Console::class)) {
+        if (class_exists(Console::class)) {
             Console::overrideIsConsole(false);
         }
 
@@ -148,18 +158,15 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     /**
      * Grabs a service from a Laminas container.
      * Recommended to use for unit testing.
-     * ``` php
+     * ```php
      * <?php
      * $em = $I->grabServiceFromContainer('Doctrine\ORM\EntityManager');
-     * ?>
      * ```
      * @part services
      *
-     * @param string $service
-     *
      * @return mixed
      */
-    public function grabServiceFromContainer($service)
+    public function grabServiceFromContainer(string $service)
     {
         return $this->client->grabServiceFromContainer($service);
     }
@@ -168,32 +175,23 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      * Adds service to a Laminas container
      *
      * @part services
-     *
-     * @param string $name
      * @param object $service
-     *
-     * @return void
      */
-    public function addServiceToContainer($name, $service)
+    public function addServiceToContainer(string $name, $service): void
     {
         $this->client->addServiceToContainer($name, $service);
     }
 
     /**
      * Opens web page using route name and parameters.
-     * ``` php
+     *
+     * ```php
      * <?php
      * $I->amOnRoute('posts.create');
      * $I->amOnRoute('posts.show', array('id' => 34));
-     * ?>
      * ```
-     *
-     * @param string $routeName
-     * @param array  $params
-     *
-     * @return void
      */
-    public function amOnRoute($routeName, array $params = [])
+    public function amOnRoute(string $routeName, array $params = []): void
     {
         $router = $this->client->grabServiceFromContainer('router');
         $url    = $router->assemble($params, ['name' => $routeName]);
@@ -207,15 +205,11 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      * <?php
      * $I->seeCurrentRouteIs('posts.index');
      * $I->seeCurrentRouteIs('posts.show', ['id' => 8]));
-     * ?>
      * ```
      *
-     * @param string $routeName
-     * @param array  $params
      *
-     * @return void
      */
-    public function seeCurrentRouteIs($routeName, array $params = [])
+    public function seeCurrentRouteIs(string $routeName, array $params = []): void
     {
         $router = $this->client->grabServiceFromContainer('router');
         $url    = $router->assemble($params, ['name' => $routeName]);
@@ -231,10 +225,10 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
 
         $this->addInternalDomainsFromRoutes($router->getRoutes());
 
-        return \array_unique($this->domainCollector);
+        return array_unique($this->domainCollector);
     }
 
-    private function addInternalDomainsFromRoutes(Traversable $routes)
+    private function addInternalDomainsFromRoutes(Traversable $routes): void
     {
         foreach ($routes as $name => $route) {
             if ($route instanceof Hostname) {
@@ -256,10 +250,8 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
 
     /**
      * @param object $route
-     *
-     * @return void
      */
-    private function addInternalDomain($route)
+    private function addInternalDomain($route): void
     {
         $regex                    = ReflectionHelper::readPrivateProperty($route, 'regex');
         $this->domainCollector [] = '/^' . $regex . '$/';
