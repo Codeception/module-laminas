@@ -1,21 +1,21 @@
 {
-    "name":"codeception/module-laminas",
-    "description":"Codeception module for the Laminas Project",
-    "keywords":["codeception", "laminas"],
-    "homepage":"http://codeception.com/",
-    "type":"library",
-    "license":"MIT",
-    "authors":[
+    "name": "codeception/module-laminas",
+    "description": "Codeception module for the Laminas Project",
+    "keywords": [ "codeception", "laminas" ],
+    "homepage": "https://codeception.com/",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
         {
-            "name":"Gintautas Miselis"
+            "name": "Gintautas Miselis"
         },
         {
-            "name":"Michael Bodnarchuk"
+            "name": "Michael Bodnarchuk"
         }
     ],
     "minimum-stability": "RC",
     "require": {
-        "php": "^7.3 || ~8.0.0",
+        "php": "^7.3 || ^8.0",
         "codeception/lib-innerbrowser": "^1.0",
         "codeception/codeception": "^4.0",
         "laminas/laminas-db": "^2.11.3",
@@ -26,8 +26,10 @@
         "codeception/module-doctrine2": "^1.0",
         "codeception/module-rest": "^1.0"
     },
-    "autoload":{
-        "classmap": ["src/"]
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
     },
     "config": {
         "classmap-authoritative": true
