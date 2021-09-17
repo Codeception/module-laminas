@@ -182,6 +182,16 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     }
 
     /**
+     * Adds factory to a Laminas container
+     *
+     * @part services
+     */
+    public function addFactoryToContainer(string $name, $factory): void
+    {
+        $this->client->addFactoryToContainer($name, $factory);
+    }
+
+    /**
      * Opens web page using route name and parameters.
      *
      * ```php
