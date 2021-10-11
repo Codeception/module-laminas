@@ -18,6 +18,7 @@ use Laminas\Mvc\ApplicationInterface;
 use Laminas\Router\Http\Hostname;
 use Laminas\Router\Http\Part;
 use Laminas\Router\Http\TreeRouteStack;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Traversable;
 use function array_unique;
 use function class_exists;
@@ -184,6 +185,9 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     /**
      * Adds factory to a Laminas container
      *
+     * @param string $name
+     * @param string|callable|FactoryInterface $factory
+     * @return void
      * @part services
      */
     public function addFactoryToContainer(string $name, $factory): void
