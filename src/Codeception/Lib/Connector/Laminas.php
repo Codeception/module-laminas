@@ -47,6 +47,11 @@ class Laminas extends AbstractBrowser
      */
     private $persistentServices = [];
 
+    /**
+     * @var array
+     */
+    private $persistentFactories = [];
+
     public function setApplicationConfig(array $applicationConfig): void
     {
         $this->applicationConfig = $applicationConfig;
@@ -148,6 +153,15 @@ class Laminas extends AbstractBrowser
         $this->persistentServices[$name] = $service;
     }
 
+    public function addFactoryToContainer(string $name, $factory): void
+    {
+        $this->application->getServiceManager()->setAllowOverride(true);
+        $this->application->getServiceManager()->setFactory($name, $factory);
+        $this->application->getServiceManager()->setAllowOverride(false);
+
+        $this->persistentFactories[$name] = $factory;
+    }
+
     private function extractHeaders(BrowserKitRequest $browserKitRequest): Headers
     {
         $headers        = [];
@@ -200,5 +214,9 @@ class Laminas extends AbstractBrowser
         $eventManager               = $this->application->getEventManager();
 
         $eventManager->detach([$sendResponseListener, 'sendResponse']);
+
+        $serviceManager->setAllowOverride(true);
+        $serviceManager->configure(['factories' => $this->persistentFactories]);
+        $serviceManager->setAllowOverride(false);
     }
 }
