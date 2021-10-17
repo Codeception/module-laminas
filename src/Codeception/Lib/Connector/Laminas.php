@@ -31,26 +31,15 @@ use function substr;
 
 class Laminas extends AbstractBrowser
 {
-    /** @var ApplicationInterface */
-    protected $application;
+    protected ?ApplicationInterface $application = null;
 
-    /**
-     * @var array
-     */
-    protected $applicationConfig = [];
+    protected array $applicationConfig = [];
 
-    /** @var LaminasRequest */
-    protected $laminasRequest;
+    protected LaminasRequest $laminasRequest;
 
-    /**
-     * @var array
-     */
-    private $persistentServices = [];
+    private array $persistentServices = [];
 
-    /**
-     * @var array
-     */
-    private $persistentFactories = [];
+    private array $persistentFactories = [];
 
     public function setApplicationConfig(array $applicationConfig): void
     {
