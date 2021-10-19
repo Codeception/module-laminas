@@ -176,8 +176,9 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      * Adds service to a Laminas container
      *
      * @part services
+     * @param array|object $service
      */
-    public function addServiceToContainer(string $name, object $service): void
+    public function addServiceToContainer(string $name, $service): void
     {
         $this->client->addServiceToContainer($name, $service);
     }
