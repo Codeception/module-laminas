@@ -45,7 +45,7 @@ use function file_exists;
  *
  * ## Parts
  *
- * * services - allows to use grabServiceFromContainer and addServiceToContainer with WebDriver or PhpBrowser modules.
+ * * services - allows using grabServiceFromContainer and addServiceToContainer with WebDriver or PhpBrowser modules.
  *
  * Usage example:
  *
@@ -64,11 +64,9 @@ use function file_exists;
  */
 class Laminas extends Framework implements DoctrineProvider, PartedModule
 {
-    /** @var ApplicationInterface */
-    public $application;
+    public ApplicationInterface $application;
 
-    /** @var AdapterInterface */
-    public $db;
+    public AdapterInterface $db;
 
     /** @var LaminasConnector */
     public $client;
@@ -79,21 +77,16 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         'em_service' => 'Doctrine\ORM\EntityManager',
     ];
 
-    /** @var array */
-    protected $applicationConfig = [];
+    protected array $applicationConfig = [];
 
-    /** @var int */
-    protected $queries           = 0;
+    protected int $queries     = 0;
 
-    /** @var int */
-    protected $time              = 0;
+    protected int $time        = 0;
 
     /**
-     * @var array
-     *
      * Used to collect domains while recursively traversing route tree
      */
-    private $domainCollector = [];
+    private array $domainCollector = [];
 
     public function _initialize()
     {
@@ -106,6 +99,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         if (isset($this->applicationConfig['module_listener_options']['config_cache_enabled'])) {
             $this->applicationConfig['module_listener_options']['config_cache_enabled'] = false;
         }
+
         if (class_exists(Console::class)) {
             Console::overrideIsConsole(false);
         }
@@ -158,7 +152,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
 
     /**
      * Grabs a service from a Laminas container.
-     * Recommended to use for unit testing.
+     * Recommended using for unit testing.
      * ```php
      * <?php
      * $em = $I->grabServiceFromContainer('Doctrine\ORM\EntityManager');
@@ -186,9 +180,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     /**
      * Adds factory to a Laminas container
      *
-     * @param string $name
      * @param string|callable|FactoryInterface $factory
-     * @return void
      * @part services
      */
     public function addFactoryToContainer(string $name, $factory): void
@@ -220,8 +212,6 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
      * $I->seeCurrentRouteIs('posts.index');
      * $I->seeCurrentRouteIs('posts.show', ['id' => 8]));
      * ```
-     *
-     *
      */
     public function seeCurrentRouteIs(string $routeName, array $params = []): void
     {
@@ -231,7 +221,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         $this->seeCurrentUrlEquals($url);
     }
 
-    protected function getInternalDomains()
+    protected function getInternalDomains(): array
     {
         /** @var TreeRouteStack $router */
         $router                = $this->client->grabServiceFromContainer('router');
@@ -252,11 +242,13 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
                 if ($parentRoute instanceof Hostname) {
                     $this->addInternalDomain($parentRoute);
                 }
+
                 // this is necessary to instantiate child routes
                 try {
                     $route->assemble([], []);
                 } catch (Exception $e) {
                 }
+
                 $this->addInternalDomainsFromRoutes($route->getRoutes());
             }
         }
