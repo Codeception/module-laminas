@@ -64,8 +64,6 @@ use function file_exists;
  */
 class Laminas extends Framework implements DoctrineProvider, PartedModule
 {
-    public ApplicationInterface $application;
-
     public AdapterInterface $db;
 
     /** @var LaminasConnector */
