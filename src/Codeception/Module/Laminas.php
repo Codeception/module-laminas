@@ -19,6 +19,7 @@ use Laminas\Router\Http\Hostname;
 use Laminas\Router\Http\Part;
 use Laminas\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Symfony\Component\BrowserKit\AbstractBrowser;
 use Traversable;
 use function array_unique;
 use function class_exists;
@@ -69,7 +70,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     public AdapterInterface $db;
 
     /** @var LaminasConnector */
-    public $client;
+    public ?AbstractBrowser $client = null;
 
     /** @var string[] */
     protected $config = [
@@ -234,7 +235,7 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
 
     private function addInternalDomainsFromRoutes(Traversable $routes): void
     {
-        foreach ($routes as $name => $route) {
+        foreach ($routes as $route) {
             if ($route instanceof Hostname) {
                 $this->addInternalDomain($route);
             } elseif ($route instanceof Part) {
