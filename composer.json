@@ -15,16 +15,16 @@
     ],
     "minimum-stability": "RC",
     "require": {
-        "php": "^7.4 || ^8.0",
-        "codeception/lib-innerbrowser": "^1.0",
-        "codeception/codeception": "^4.0",
+        "php": "^7.4 | ^8.0",
+        "codeception/lib-innerbrowser": "^2.0",
+        "codeception/codeception": "^4.1",
         "laminas/laminas-db": "^2.11.3",
         "laminas/laminas-mvc": "^3.1.1"
     },
     "require-dev": {
-        "codeception/module-asserts": "^1.0",
-        "codeception/module-doctrine2": "^1.0",
-        "codeception/module-rest": "^1.0"
+        "codeception/module-asserts": "^2.0",
+        "codeception/module-doctrine2": "^2.0",
+        "codeception/module-rest": "^2.0"
     },
     "autoload": {
         "classmap": [
