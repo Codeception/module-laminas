@@ -11,6 +11,7 @@ use Codeception\Lib\Interfaces\DoctrineProvider;
 use Codeception\Lib\Interfaces\PartedModule;
 use Codeception\TestInterface;
 use Codeception\Util\ReflectionHelper;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Laminas\Console\Console;
 use Laminas\Db\Adapter\AdapterInterface;
@@ -72,8 +73,8 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     /** @var LaminasConnector */
     public ?AbstractBrowser $client = null;
 
-    /** @var string[] */
-    protected $config = [
+    /** @var array<string, mixed> */
+    protected array $config = [
         'config'     => 'tests/application.config.php',
         'em_service' => 'Doctrine\ORM\EntityManager',
     ];
@@ -85,11 +86,11 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
     protected int $time        = 0;
 
     /**
-     * Used to collect domains while recursively traversing route tree
+     * @var string[] Used to collect domains while recursively traversing route tree
      */
     private array $domainCollector = [];
 
-    public function _initialize()
+    public function _initialize(): void
     {
         $initAutoloaderFile = Configuration::projectDir() . 'init_autoloader.php';
         if (file_exists($initAutoloaderFile)) {
@@ -110,14 +111,14 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         $this->client->setApplicationConfig($this->applicationConfig);
     }
 
-    public function _before(TestInterface $test)
+    public function _before(TestInterface $test): void
     {
         $this->client = new LaminasConnector();
         $this->client->setApplicationConfig($this->applicationConfig);
         $_SERVER['REQUEST_URI'] = '';
     }
 
-    public function _after(TestInterface $test)
+    public function _after(TestInterface $test): void
     {
         $_SESSION = [];
         $_GET     = [];
@@ -130,17 +131,20 @@ class Laminas extends Framework implements DoctrineProvider, PartedModule
         parent::_after($test);
     }
 
-    public function _parts()
+    /**
+     * @return string[]
+     */
+    public function _parts(): array
     {
         return ['services'];
     }
 
-    public function _afterSuite()
+    public function _afterSuite(): void
     {
         unset($this->client);
     }
 
-    public function _getEntityManager()
+    public function _getEntityManager(): EntityManagerInterface
     {
         if (!$this->client) {
             $this->fail('Laminas module is not loaded');

@@ -21,10 +21,8 @@ use function array_map;
 use function explode;
 use function html_entity_decode;
 use function implode;
-use function is_null;
 use function parse_str;
 use function str_replace;
-use function strpos;
 use function strtolower;
 use function strtoupper;
 use function substr;
@@ -57,6 +55,9 @@ class Laminas extends AbstractBrowser
         $this->createApplication();
 
         $laminasRequest = $this->application->getRequest();
+        if (!$laminasRequest instanceof LaminasRequest) {
+            throw new \InvalidArgumentException('Expected to get instance of ' . LaminasRequest::class);
+        }
         $uri            = new HttpUri($request->getUri());
         $queryString    = $uri->getQuery();
         $method         = strtoupper($request->getMethod());
@@ -72,12 +73,12 @@ class Laminas extends AbstractBrowser
             $post = $request->getParameters();
         }
 
-        $laminasRequest->setCookies(new Parameters($request->getCookies()));
+        $laminasRequest->setCookies($request->getCookies());
         $laminasRequest->setServer(new Parameters($request->getServer()));
         $laminasRequest->setQuery(new Parameters($query));
         $laminasRequest->setPost(new Parameters($post));
         $laminasRequest->setFiles(new Parameters($request->getFiles()));
-        $laminasRequest->setContent(is_null($content) ? '' : $content);
+        $laminasRequest->setContent($content ?? '');
         $laminasRequest->setMethod($method);
         $laminasRequest->setUri($uri);
 
@@ -116,7 +117,7 @@ class Laminas extends AbstractBrowser
         return $this->laminasRequest;
     }
 
-    public function grabServiceFromContainer(string $service)
+    public function grabServiceFromContainer(string $service): object
     {
         $serviceManager = $this->application->getServiceManager();
 
@@ -133,10 +134,7 @@ class Laminas extends AbstractBrowser
         $this->persistentServices[$name] = $service;
     }
 
-    /**
-     * @param array|object $service
-     */
-    public function addServiceToContainer(string $name, $service): void
+    public function addServiceToContainer(string $name, array|object $service): void
     {
         $this->application->getServiceManager()->setAllowOverride(true);
         $this->application->getServiceManager()->setService($name, $service);
@@ -175,7 +173,7 @@ class Laminas extends AbstractBrowser
                 ENT_NOQUOTES
             );
 
-            if (strpos($header, 'Http-') === 0) {
+            if (str_starts_with($header, 'Http-')) {
                 $headers[substr($header, 5)] = $val;
             } elseif (isset($contentHeaders[$header])) {
                 $headers[$header] = $val;
