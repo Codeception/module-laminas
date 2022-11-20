@@ -152,6 +152,11 @@ class Laminas extends AbstractBrowser
         $this->persistentFactories[$name] = $factory;
     }
 
+    public function getApplication(): ?ApplicationInterface
+    {
+        return $this->application;
+    }
+
     private function extractHeaders(BrowserKitRequest $browserKitRequest): Headers
     {
         $headers        = [];
