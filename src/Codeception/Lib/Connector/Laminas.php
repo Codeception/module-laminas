@@ -117,7 +117,7 @@ class Laminas extends AbstractBrowser
         return $this->laminasRequest;
     }
 
-    public function grabServiceFromContainer(string $service): object
+    public function grabServiceFromContainer(string $service): mixed
     {
         $serviceManager = $this->application->getServiceManager();
 
