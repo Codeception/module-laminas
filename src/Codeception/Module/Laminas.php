@@ -57,7 +57,7 @@ use function file_exists;
  *     enabled:
  *         - Laminas:
  *             part: services
- *         - Doctrine2:
+ *         - Doctrine:
  *             depends: Laminas
  *         - WebDriver:
  *             url: http://your-url.com
