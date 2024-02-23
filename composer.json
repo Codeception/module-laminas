@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "codeception/module-asserts": "^3.0",
-        "codeception/module-doctrine2": "^3.0",
+        "codeception/module-doctrine": "^3.1",
         "codeception/module-rest": "^3.3"
     },
     "autoload": {
